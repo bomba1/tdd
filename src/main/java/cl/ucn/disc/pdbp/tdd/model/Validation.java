@@ -26,6 +26,7 @@ package cl.ucn.disc.pdbp.tdd.model;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.regex.Pattern;
 
 public class Validation {
 
@@ -42,13 +43,17 @@ public class Validation {
     }
 
     /**
-     * Metodo para verificar si un campo es nulo
-     * @param nombre de la persona
-     * @param apellido de la persona
-     * @param rutOk de la persona
+     * Metodo para ver si un campo es nulo
+     * @param nombre        de la persona
+     * @param apellido      de la persona
+     * @param rutOk         de la persona
+     * @param direccion     de la persona
+     * @param telefonoFijo  de la persona
+     * @param telefonoMovil de la persona
+     * @param email         de la persona
      */
-    public void verificarNulidad(String nombre, String apellido, String rutOk) {
-        if (nombre == null || apellido == null || rutOk == null) {
+    public void verificarNulidad(String nombre, String apellido, String rutOk, String direccion, Integer telefonoFijo, Integer telefonoMovil, String email) {
+        if (nombre == null || apellido == null || rutOk == null || direccion == null || telefonoFijo == null || telefonoMovil == null || email == null) {
             throw new NullPointerException("Parametro nulo");
         }
     }
@@ -144,6 +149,41 @@ public class Validation {
         } else {
             log.debug("Rut valido");
         }
+
+    }
+
+    /**
+     * Metodo para validar un telefono fijo
+     * @param telefonoFijo de la persona
+     */
+    public void validarTelefonoFijo(Integer telefonoFijo) {
+        if (telefonoFijo < 100000) {
+            throw new RuntimeException("Telefono no valido");
+        }
+    }
+
+    /**
+     * Procedimiento para validar un telefono movil
+     * @param telefonoMovil de la persona
+     */
+    public void validarTelefonoMovil(Integer telefonoMovil) {
+        if (telefonoMovil < 10000000) {
+            throw new RuntimeException("Movil no valido");
+        }
+    }
+
+    /**
+     * Metodo para validar el email de una persona
+     * @param email de la persona
+     */
+    public boolean validarEmail(String email) {
+        //Expresion regular sacada desde https://howtodoinjava.com/regex/java-regex-validate-email-address/
+        String REGEX = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+
+        //Ejecuta la expresion regular
+        Pattern PATTERN = Pattern.compile(REGEX);
+
+        return PATTERN.matcher(email).find();
 
     }
 
