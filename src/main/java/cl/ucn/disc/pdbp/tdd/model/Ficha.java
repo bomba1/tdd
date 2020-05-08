@@ -47,14 +47,14 @@ public final class Ficha {
 
     /**
      * Constructor de Ficha
-     * @param numero
-     * @param fechaNacimiento
-     * @param nombrePaciente
-     * @param especie
-     * @param raza
-     * @param sexo
-     * @param color
-     * @param tipo
+     * @param numero           de la mascota
+     * @param fechaNacimiento  de la mascota
+     * @param nombrePaciente   de la mascota
+     * @param especie          del paciente
+     * @param raza             de la mascota
+     * @param sexo             de la mascota
+     * @param color            de la mascota
+     * @param tipo             de la mascota
      */
     public Ficha(long numero, ZonedDateTime fechaNacimiento, String nombrePaciente, String especie, String raza, Sexo sexo, String color, Tipo tipo) {
         this.numero = numero;
