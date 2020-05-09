@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package cl.ucn.disc.pdbp.tdd.model;
+package utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

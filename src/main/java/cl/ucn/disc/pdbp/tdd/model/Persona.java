@@ -23,28 +23,63 @@
  */
 
 package cl.ucn.disc.pdbp.tdd.model;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+import utils.Validation;
 
 /**
  * Clase que representa una persona
  */
+@DatabaseTable(tableName = "Persona")
 public final class Persona {
+
+    /**
+     * Id de la persona
+     */
+    @DatabaseField(generatedId = true)
+    private Long id;
 
     /**
      * Nombre de la persona
      */
+    @DatabaseField(canBeNull = false)
     private String nombre;
 
     /**
      * Apellido de la persona
      */
+    @DatabaseField(canBeNull = false)
     private String apellido;
 
     /**
      * Rut de la persona
      */
-    private String rutOk;
+    @DatabaseField(canBeNull = false, index = true)
+    private String rut;
 
+    /**
+     * Direccion de la persona
+     */
+    @DatabaseField(canBeNull = false)
+    private String direccion;
 
+    /**
+     * Telefono fijo
+     */
+    @DatabaseField(canBeNull = false)
+    private Integer telefonoFijo;
+
+    /**
+     * Telefono Movil
+     */
+    @DatabaseField(canBeNull = false)
+    private Integer telefonoMovil;
+
+    /**
+     * Email
+     */
+    @DatabaseField(canBeNull = false)
+    private String email;
 
 
     /**
@@ -53,11 +88,11 @@ public final class Persona {
      * @param apellido a utilizar
      * @param rut valido
      */
-    public Persona(String nombre, String apellido, String rut) {
+    public Persona(String nombre, String apellido, String rut, String direccion, Integer telefonoFijo, Integer telefonoMovil, String email) {
         Validation validar = new Validation ();
 
         //Verificaciones
-        validar.verificarNulidad(nombre,apellido,rut);
+        validar.verificarNulidad(nombre,apellido,rut,direccion,telefonoFijo,telefonoMovil,email);
 
         validar.verificarTamanioNombre(nombre);
         this.nombre = nombre;
@@ -65,10 +100,26 @@ public final class Persona {
         validar.verificarTamanioApellido(apellido);
         this.apellido = apellido;
 
-        validar.validarRut2(rutOk);
-        this.rutOk = rut;
+        validar.validarRut2(rut);
+        this.rut = rut;
 
+        this.direccion = direccion;
 
+        validar.validarTelefonoFijo(telefonoFijo);
+        this.telefonoFijo = telefonoFijo;
+
+        validar.validarTelefonoMovil(telefonoMovil);
+        this.telefonoMovil = telefonoMovil;
+
+        validar.validarEmail(email);
+        this.email = email;
+    }
+
+    /**
+     * Funcion que retorna la id de la persona
+     */
+    public Long getId() {
+        return id;
     }
 
     /**
@@ -86,9 +137,44 @@ public final class Persona {
     }
 
     /**
-     * Retorna el nombre y apellido de la perosna
+     * Retorna el nombre y apellido de la persona
      */
     public String getNombreApellido() {
         return this.nombre + " " + this.apellido;
+    }
+
+    /**
+     * Retorna el rut de la persona
+     */
+    public String getRut() {
+        return rut;
+    }
+
+    /**
+     * Retorna la direccion de la persona
+     */
+    public String getDireccion() {
+        return direccion;
+    }
+
+    /**
+     * Retorna el telefono fijo de la persona
+     */
+    public Integer getTelefonoFijo() {
+        return telefonoFijo;
+    }
+
+    /**
+     * Retorna el telefono movil de la persona
+     */
+    public Integer getTelefonoMovil() {
+        return telefonoMovil;
+    }
+
+    /**
+     * Retorna el email de la persona
+     */
+    public String getEmail() {
+        return email;
     }
 }
