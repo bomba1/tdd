@@ -43,51 +43,8 @@ public class Validation {
     }
 
     /**
-     * Metodo para ver si un campo es nulo
-     * @param nombre        de la persona
-     * @param apellido      de la persona
-     * @param rutOk         de la persona
-     * @param direccion     de la persona
-     * @param telefonoFijo  de la persona
-     * @param telefonoMovil de la persona
-     * @param email         de la persona
-     */
-    public void verificarNulidad(String nombre, String apellido, String rutOk, String direccion, Integer telefonoFijo, Integer telefonoMovil, String email) {
-        if (nombre == null || apellido == null || rutOk == null || direccion == null || telefonoFijo == null || telefonoMovil == null || email == null) {
-            throw new NullPointerException("Parametro nulo");
-        }
-    }
-
-    /**
-     * Metodo que verifica el tamaño de un nombre
-     * @param nombre de la persona
-     */
-    public void verificarTamanioNombre(String nombre) {
-        int cantidadLetras = nombre.length();
-        if (cantidadLetras > 1) {
-            log.debug("Nombre correcto");
-        } else {
-            throw new IllegalArgumentException("El nombre tiene menos de 2 letras");
-        }
-    }
-
-    /**
-     * Metodo que verifica el tamaño del apellido
-     * @param apellido de la persona
-     */
-    public void verificarTamanioApellido(String apellido) {
-        int cantidadLetras = apellido.length();
-        if (cantidadLetras > 2) {
-            log.debug("Apellido valido");
-        } else {
-            throw new IllegalArgumentException("El apellido tiene menos de 3 letras");
-        }
-    }
-
-    /**
-     * Metodo para validar rut
-     * @param rut
-     * @return
+     * Metodo para validar rut, sacado de: https://www.qualityinfosolutions.com/validador-de-rut-chileno-en-java/
+     * @param rut de la persona
      */
     public static boolean validarRut(String rut) {
 
@@ -96,6 +53,7 @@ public class Validation {
             return false;
         }
         try {
+            //Se quitan los puntos y guiones si esque viene con ellos el String
             rut =  rut.toUpperCase();
             rut = rut.replace(".", "");
             rut = rut.replace("-", "");
@@ -103,10 +61,13 @@ public class Validation {
 
             char dv = rut.charAt(rut.length() - 1);
 
+            //Aqui se verifica el algoritmo, multiplicando sus partes y aplicando modulo 11(como el algoritmo para verificar digito final)
             int m = 0, s = 1;
             for (; rutAux != 0; rutAux /= 10) {
                 s = (s + rutAux % 10 * (9 - m++ % 6)) % 11;
             }
+
+            //Si el valor entregado en s es igual al esperado por el algoritmo, la validacion sera verdadera y el rut valido
             if (dv == (char) (s != 0 ? s + 47 : 75)) {
                 validacion = true;
             }
@@ -118,14 +79,15 @@ public class Validation {
     }
 
     /**
-     * Metodo para validar rut con exception
+     * Metodo para validar rut con exception, proveniente de : https://www.qualityinfosolutions.com/validador-de-rut-chileno-en-java/
      * @param rut
      */
-    public void validarRut2(String rut) {
+    public static void validarRut2(String rut) {
 
         boolean validacion = false;
 
         try {
+            //Se quitan los puntos y guiones del Sring
             rut =  rut.toUpperCase();
             rut = rut.replace(".", "");
             rut = rut.replace("-", "");
@@ -133,10 +95,13 @@ public class Validation {
 
             char dv = rut.charAt(rut.length() - 1);
 
+            //Aqui se realiza el algoritmo para saber que numero es el verificador
             int m = 0, s = 1;
             for (; rutAux != 0; rutAux /= 10) {
                 s = (s + rutAux % 10 * (9 - m++ % 6)) % 11;
             }
+
+            //Si el numero es el esperado, pasa la prueba
             if (dv == (char) (s != 0 ? s + 47 : 75)) {
                 validacion = true;
             }
@@ -144,7 +109,7 @@ public class Validation {
         } catch (java.lang.NumberFormatException e) {
         } catch (Exception e) {
         }
-        if (validacion == false) {
+        if (validacion) {
             throw new RuntimeException("Rut no valido");
         } else {
             log.debug("Rut valido");
@@ -153,30 +118,10 @@ public class Validation {
     }
 
     /**
-     * Metodo para validar un telefono fijo
-     * @param telefonoFijo de la persona
-     */
-    public void validarTelefonoFijo(Integer telefonoFijo) {
-        if (telefonoFijo < 100000) {
-            throw new RuntimeException("Telefono no valido");
-        }
-    }
-
-    /**
-     * Procedimiento para validar un telefono movil
-     * @param telefonoMovil de la persona
-     */
-    public void validarTelefonoMovil(Integer telefonoMovil) {
-        if (telefonoMovil < 10000000) {
-            throw new RuntimeException("Movil no valido");
-        }
-    }
-
-    /**
      * Metodo para validar el email de una persona
      * @param email de la persona
      */
-    public boolean validarEmail(String email) {
+    public static boolean validarEmail(String email) {
         //Expresion regular sacada desde https://howtodoinjava.com/regex/java-regex-validate-email-address/
         String REGEX = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
 

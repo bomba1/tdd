@@ -89,29 +89,38 @@ public final class Persona {
      * @param rut valido
      */
     public Persona(String nombre, String apellido, String rut, String direccion, Integer telefonoFijo, Integer telefonoMovil, String email) {
-        Validation validar = new Validation ();
 
         //Verificaciones
-        validar.verificarNulidad(nombre,apellido,rut,direccion,telefonoFijo,telefonoMovil,email);
+        if (nombre == null || apellido == null || rut == null || direccion == null || telefonoFijo == null || telefonoMovil == null || email == null) {
+            throw new NullPointerException("Parametro nulo");
+        }
 
-        validar.verificarTamanioNombre(nombre);
+        if (nombre.length() < 2) {
+            throw new IllegalArgumentException("El nombre tiene menos de 2 letras");
+        }
         this.nombre = nombre;
 
-        validar.verificarTamanioApellido(apellido);
+        if (apellido.length() < 3) {
+            throw new IllegalArgumentException("El apellido tiene menos de 3 letras");
+        }
         this.apellido = apellido;
 
-        validar.validarRut2(rut);
+        Validation.validarRut2(rut);
         this.rut = rut;
 
         this.direccion = direccion;
 
-        validar.validarTelefonoFijo(telefonoFijo);
+        if (telefonoFijo < 100000) {
+            throw new RuntimeException("Telefono no valido");
+        }
         this.telefonoFijo = telefonoFijo;
 
-        validar.validarTelefonoMovil(telefonoMovil);
+        if (telefonoMovil < 10000000) {
+            throw new RuntimeException("Movil no valido");
+        }
         this.telefonoMovil = telefonoMovil;
 
-        validar.validarEmail(email);
+        Validation.validarEmail(email);
         this.email = email;
     }
 
