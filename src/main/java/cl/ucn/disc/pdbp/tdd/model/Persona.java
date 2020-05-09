@@ -81,12 +81,22 @@ public final class Persona {
     @DatabaseField(canBeNull = false)
     private String email;
 
+    /**
+     * Constructor vacio
+     */
+    Persona() {
+
+    }
 
     /**
      * Constructor de una persona
-     * @param nombre a utilizar
-     * @param apellido a utilizar
-     * @param rut valido
+     * @param nombre
+     * @param apellido
+     * @param rut
+     * @param direccion
+     * @param telefonoFijo
+     * @param telefonoMovil
+     * @param email
      */
     public Persona(String nombre, String apellido, String rut, String direccion, Integer telefonoFijo, Integer telefonoMovil, String email) {
 
@@ -105,7 +115,9 @@ public final class Persona {
         }
         this.apellido = apellido;
 
-        Validation.validarRut2(rut);
+        if (!Validation.esValido(rut)) {
+            throw new RuntimeException("El rut deberia ser valido");
+        }
         this.rut = rut;
 
         this.direccion = direccion;
