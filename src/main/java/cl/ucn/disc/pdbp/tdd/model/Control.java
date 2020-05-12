@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020 Diego Urrutia-Astorga <durrutia@ucn.cl>.
+ * Copyright (c) 2020 Pablo Salas Olivares <pablo.salas@ucn.cl>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,47 +29,60 @@ import java.time.ZonedDateTime;
  *
  */
 public final class Control {
+
+    /**
+     * Id del control
+     */
+    private Long idControl;
+
     /**
      * Fecha del control
      */
-    private final ZonedDateTime fecha;
+    private ZonedDateTime fecha;
 
     /**
      * Fecha proximo control
      */
-    private final ZonedDateTime fechaProximoControl;
+    private ZonedDateTime fechaProximoControl;
 
     /**
      * Temperatura
      * Min 28
      * Max 50   //TODO: verificar la temperatura minima y maxima
      */
-    private final double temperatura;
+    private double temperatura;
 
     /**
      * Peso(kg)
      * Min 0
      * Max 200  //TODO: Verificar el valor maximo
      */
-    private final double peso;
+    private double peso;
 
     /**
      * Altura(cm)
      * Min 1
      * Max 200 //TODO: Verificar la altura maxima
      */
-    private final double altura;
+    private double altura;
 
     /**
      * Diagnostico
      */
-    private final String diagnostico;
+    private String diagnostico;
 
     /**
      * El veterinario
      * nota: Enlace muchos a uno con veterinario
      */
-    private final Persona veterinario;
+    private Persona veterinario;
+
+    /**
+     * Constructor vacio de Control
+     */
+    Control () {
+
+    }
 
     /**
      * Constructor de la clase
@@ -90,6 +103,14 @@ public final class Control {
         this.altura = altura;
         this.diagnostico = diagnostico;
         this.veterinario = veterinario;
+    }
+
+    /**
+     *
+     * @return id control
+     */
+    public Long getIdControl() {
+        return idControl;
     }
 
     /**

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020 Diego Urrutia-Astorga <durrutia@ucn.cl>.
+ * Copyright (c) 2020 Pablo Salas Olivares <pablo.salas@ucn.cl>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,43 +32,49 @@ public final class Ficha {
     /**
      * Numero de ficha
      */
-    private final long numero;
+    private Long numero;
 
     /**
      * Fecha de nacimiento
      */
-    private final ZonedDateTime fechaNacimiento;
+    private ZonedDateTime fechaNacimiento;
 
     /**
      * Nombre del paciente
      */
-    private final String nombrePaciente;
+    private String nombrePaciente;
 
     /**
      * Especie del paciente
      */
-    private final String especie;
+    private String especie;
 
     /**
      * Raza del paciente
      */
-    private final String raza;
+    private String raza;
 
     /**
      * Sexo del paciente
      */
-    private final Sexo sexo;
+    private Sexo sexo;
 
     /**
      * Color del paciente
      */
-    private final String color;
+    private String color;
 
     /**
      * Tipo del paciente
      */
-    private final Tipo tipo;
+    private Tipo tipo;
 
+    /**
+     * Constructor vacio de Ficha
+     */
+    Ficha () {
+
+    }
     /**
      * Constructor de Ficha
      * @param numero           de la mascota
@@ -80,7 +86,7 @@ public final class Ficha {
      * @param color            de la mascota
      * @param tipo             de la mascota
      */
-    public Ficha(long numero, ZonedDateTime fechaNacimiento, String nombrePaciente, String especie, String raza, Sexo sexo, String color, Tipo tipo) {
+    public Ficha(Long numero, ZonedDateTime fechaNacimiento, String nombrePaciente, String especie, String raza, Sexo sexo, String color, Tipo tipo) {
         this.numero = numero;
         this.fechaNacimiento = fechaNacimiento;
         this.nombrePaciente = nombrePaciente;
@@ -95,7 +101,7 @@ public final class Ficha {
      *
      * @return the numero
      */
-    public long getNumero() {
+    public Long getNumero() {
         return numero;
     }
 
