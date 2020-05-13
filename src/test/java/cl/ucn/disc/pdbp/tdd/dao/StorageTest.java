@@ -99,4 +99,62 @@ public final class StorageTest {
             log.error("Error",e);
         }
     }
+
+    /**
+     * Probando el repositorio
+     */
+    @Test
+    public void testRepository() {
+
+        //La base de datos a utilizar(en la memoria RAM)
+        String databaseUrl = "jdbc:h2:mem:fivet_db";
+
+        //Fuente de conexion
+        try (ConnectionSource connectionSource = new JdbcConnectionSource(databaseUrl)) {
+
+            // Crear la tabla persona
+            TableUtils.createTableIfNotExists(connectionSource, Persona.class);
+
+            //El repositorio
+            Repository<Persona, Long> elRepo = new RepositoryOrmLite<>(connectionSource, Persona.class);
+
+            //Obtener lista de personas(0)
+            {
+                List<Persona> personas = elRepo.obtenerLista();
+
+                //El tamaño debe ser 0
+                Assertions.assertEquals(0, personas.size(), "size != 0!!");
+            }
+
+
+            //Probar la insercion de persona 1
+            {
+                Persona persona = new Persona( "Pablo", "Salas",  "194441568",  "Calle Falsa 123", 780801, 974994775, "pablo.salas@alumnos.ucn.cl");
+                if (!elRepo.insertar(persona)) {
+                    Assertions.fail("No se inserto la persona");
+                }
+            }
+
+            //Probar la insercion de persona repetida(error)
+            {
+                Persona persona = new Persona( "Pablo", "Salas",  "194441568",  "Calle Falsa 123", 780801, 974994775, "pablo.salas@alumnos.ucn.cl");
+                Assertions.assertThrows(RuntimeException.class, ()-> elRepo.insertar(persona));
+
+            }
+
+
+            //Obtener lista de personas(1)
+            {
+                List<Persona> personas = elRepo.obtenerLista();
+
+                //El tamaño debe ser 1
+                Assertions.assertEquals(1, personas.size(), "size != 1!!");
+            }
+
+
+
+        } catch (IOException | SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
