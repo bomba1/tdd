@@ -54,7 +54,7 @@ public final class Persona {
     /**
      * Rut de la persona
      */
-    @DatabaseField(canBeNull = false, index = true)
+    @DatabaseField(canBeNull = false,unique = true, index = true)
     private String rut;
 
     /**
