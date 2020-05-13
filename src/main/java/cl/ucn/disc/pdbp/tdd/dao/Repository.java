@@ -23,35 +23,37 @@
  */
 
 package cl.ucn.disc.pdbp.tdd.dao;
-
-import cl.ucn.disc.pdbp.tdd.model.Ficha;
-
 import java.util.List;
 
-public class FichaDaoImpl implements FichaDao {
+public interface Repository <T, K> {
 
-    @Override
-    public List<Ficha> obtenerLista() {
-        return null;
-    }
+    /**
+     * @return una lista de T
+     */
+    List<T> obtenerLista();
 
-    @Override
-    public Ficha buscarPorId(Long id) {
-        return null;
-    }
+    /**
+     * @param id por buscar
+     * @return Objeto T
+     */
+    T buscarPorId(K id);
 
-    @Override
-    public void crear(Ficha ficha) {
+    /**
+     * @param t a registrar
+     * @return verdadero o falso
+     */
+    boolean insertar(T t);
 
-    }
+    /**
+     * @param t a actualizar
+     * @return verdadero o falso
+     */
+    boolean actualizar(T t);
 
-    @Override
-    public void actualizar(Ficha ficha) {
+    /**
+     * @param id a eliminar
+     * @return verdadero o falso
+     */
+    boolean eliminar(K id);
 
-    }
-
-    @Override
-    public void eliminar(Long id) {
-
-    }
 }
