@@ -23,6 +23,8 @@
  */
 
 package cl.ucn.disc.pdbp.tdd.dao;
+import com.j256.ormlite.stmt.QueryBuilder;
+
 import java.util.List;
 
 public interface Repository <T, K> {
@@ -31,6 +33,18 @@ public interface Repository <T, K> {
      * @return una lista de T
      */
     List<T> obtenerLista();
+
+    /**
+     * Obtiene una lista de T filtradas por una palabra clave
+     * @param llave a buscar
+     * @param valor a buscar
+     */
+    List<T> obtenerLista(String llave, Object valor);
+
+    /**
+     *Metodo que retorna una consulta
+     */
+    QueryBuilder<T, K> getQuery();
 
     /**
      * @param id por buscar

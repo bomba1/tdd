@@ -2,6 +2,7 @@ package cl.ucn.disc.pdbp.tdd.dao;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 
 import java.sql.SQLException;
@@ -35,6 +36,9 @@ public final class RepositoryOrmLite<T, K> implements Repository<T, K> {
 
     }
 
+    /**
+     * Retorna una lista de objetos
+     */
     @Override
     public List<T> obtenerLista() {
         try {
@@ -44,6 +48,32 @@ public final class RepositoryOrmLite<T, K> implements Repository<T, K> {
         }
     }
 
+    /**
+     * Obtiene una lista de T filtradas por una palabra clave
+     * @param llave a buscar
+     * @param valor a buscar
+     */
+    public List<T> obtenerLista(String llave, Object valor) {
+        try {
+            return elDao.queryForEq(llave,valor);
+        } catch (SQLException throwables) {
+            throw new RuntimeException(throwables);
+        }
+    }
+
+    /**
+     *Metodo que retorna una consulta
+     */
+    @Override
+    public QueryBuilder<T, K> getQuery() {
+        return elDao.queryBuilder();
+    }
+
+
+    /**
+     * Retorna un objeto buscandolo por su id
+     * @param id por buscar
+     */
     @Override
     public T buscarPorId(K id) {
         try {
@@ -53,6 +83,10 @@ public final class RepositoryOrmLite<T, K> implements Repository<T, K> {
         }
     }
 
+    /**
+     * Metodo que inserta un objeto y retorna true si se logro.
+     * @param t a registrar
+     */
     @Override
     public boolean insertar(T t) {
         try {
@@ -62,6 +96,10 @@ public final class RepositoryOrmLite<T, K> implements Repository<T, K> {
         }
     }
 
+    /**
+     * Funcion que actualiza un objeto en la base de datos y retorna true si fue asi
+     * @param t a actualizar
+     */
     @Override
     public boolean actualizar(T t) {
         try {
@@ -71,6 +109,10 @@ public final class RepositoryOrmLite<T, K> implements Repository<T, K> {
         }
     }
 
+    /**
+     * Elimina un objeto y retorna falso
+     * @param id para eliminar un objeto
+     */
     @Override
     public boolean eliminar(K id) {
         try {
@@ -79,4 +121,6 @@ public final class RepositoryOrmLite<T, K> implements Repository<T, K> {
             throw new RuntimeException(throwables);
         }
     }
+
+
 }
