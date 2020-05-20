@@ -76,6 +76,9 @@ public final class RepositoryOrmLite<T, K> implements Repository<T, K> {
      */
     @Override
     public T buscarPorId(K id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Atributo nulo");
+        }
         try {
             return this.elDao.queryForId(id);
         } catch (SQLException throwables) {
@@ -89,6 +92,9 @@ public final class RepositoryOrmLite<T, K> implements Repository<T, K> {
      */
     @Override
     public boolean insertar(T t) {
+        if (t == null) {
+            throw new IllegalArgumentException();
+        }
         try {
             return elDao.create(t) == 1;
         } catch (SQLException throwables){
@@ -102,6 +108,9 @@ public final class RepositoryOrmLite<T, K> implements Repository<T, K> {
      */
     @Override
     public boolean actualizar(T t) {
+        if (t == null) {
+            throw new IllegalArgumentException();
+        }
         try {
             return elDao.update(t) == 1;
         } catch (SQLException throwables){
@@ -115,6 +124,9 @@ public final class RepositoryOrmLite<T, K> implements Repository<T, K> {
      */
     @Override
     public boolean eliminar(K id) {
+        if (id == null) {
+            throw new IllegalArgumentException();
+        }
         try {
             return elDao.deleteById(id) == 1;
         } catch (SQLException throwables){
