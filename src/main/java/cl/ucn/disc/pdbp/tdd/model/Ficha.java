@@ -23,51 +23,85 @@
  */
 
 package cl.ucn.disc.pdbp.tdd.model;
+import cl.ucn.disc.pdbp.tdd.dao.ZonedDateTimeType;
+import com.j256.ormlite.dao.ForeignCollection;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
+
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  *Ficha Veterinaria
  */
 public final class Ficha {
-
+    /**
+     * Id de la ficha
+     */
+    @DatabaseField(generatedId = true)
+    private Long id;
     /**
      * Numero de ficha
      */
-    private Long numero;
+    @DatabaseField(unique = true)
+    private Integer numero;
 
     /**
      * Fecha de nacimiento
      */
+    @DatabaseField(persisterClass = ZonedDateTimeType.class)
     private ZonedDateTime fechaNacimiento;
 
     /**
      * Nombre del paciente
      */
+    @DatabaseField
     private String nombrePaciente;
 
     /**
      * Especie del paciente
      */
+    @DatabaseField
     private String especie;
 
     /**
      * Raza del paciente
      */
+    @DatabaseField
     private String raza;
 
     /**
      * Sexo del paciente
      */
+    @DatabaseField
     private Sexo sexo;
 
     /**
      * Color del paciente
      */
+    @DatabaseField
     private String color;
 
     /**
      * Tipo del paciente
      */
+    @DatabaseField
     private Tipo tipo;
+
+    /**
+     * El dueio de la mascota
+     */
+    @DatabaseField(foreign = true, canBeNull = false, foreignAutoRefresh = true)
+    private Persona duenio;
+
+    /**
+     * Lista de controles
+     */
+    //@DatabaseField(foreign = true, canBeNull = false, foreignAutoRefresh = true)
+    @ForeignCollectionField()
+    private ForeignCollection<Control> controles;
 
     /**
      * Constructor vacio de Ficha
@@ -86,7 +120,7 @@ public final class Ficha {
      * @param color            de la mascota
      * @param tipo             de la mascota
      */
-    public Ficha(Long numero, ZonedDateTime fechaNacimiento, String nombrePaciente, String especie, String raza, Sexo sexo, String color, Tipo tipo) {
+    public Ficha(Integer numero, ZonedDateTime fechaNacimiento, String nombrePaciente, String especie, String raza, Sexo sexo, String color, Tipo tipo, Persona duenio) {
         this.numero = numero;
         this.fechaNacimiento = fechaNacimiento;
         this.nombrePaciente = nombrePaciente;
@@ -95,13 +129,22 @@ public final class Ficha {
         this.sexo = sexo;
         this.color = color;
         this.tipo = tipo;
+        this.duenio = duenio;
+    }
+
+    /**
+     *
+     * @return the id
+     */
+    public Long getId() {
+        return id;
     }
 
     /**
      *
      * @return the numero
      */
-    public Long getNumero() {
+    public Integer getNumero() {
         return numero;
     }
 
@@ -159,5 +202,25 @@ public final class Ficha {
      */
     public Tipo getTipo() {
         return tipo;
+    }
+
+    /**
+     *
+     * @return the duenio
+     */
+    public Persona getDuenio() {
+        return duenio;
+    }
+
+    public List<Control> getControles() {
+        return Collections.unmodifiableList(new ArrayList<>(this.controles));
+    }
+
+    /**
+     * Cambiar una lista de controles
+     * @param controles
+     */
+    public void setControles(ForeignCollection<Control> controles) {
+        this.controles = controles;
     }
 }

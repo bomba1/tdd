@@ -23,9 +23,10 @@
  */
 package cl.ucn.disc.pdbp.tdd.dao;
 
-import cl.ucn.disc.pdbp.tdd.model.Persona;
+import cl.ucn.disc.pdbp.tdd.model.*;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
+import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
@@ -33,9 +34,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.Entity;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 /**
@@ -49,6 +52,7 @@ public final class StorageTest {
      * Variable para imprimir por pantalla u otros motivos
      */
     private static final Logger log = LoggerFactory.getLogger(StorageTest.class);
+
 
     /**
      * Metodo para probar el almacenamiento
@@ -101,10 +105,10 @@ public final class StorageTest {
     }
 
     /**
-     * Probando el repositorio
+     * Probando el repositorio de una persona
      */
     @Test
-    public void testRepository() {
+    public void testRepositoryPersona() {
 
         //La base de datos a utilizar(en la memoria RAM)
         String databaseUrl = "jdbc:h2:mem:fivet_db";
@@ -157,4 +161,77 @@ public final class StorageTest {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * Probar el repositorio de una ficha
+     */
+    @Test
+    public void testRepositoryFicha() {
+        //La base de datos a utilizar(en la memoria RAM)
+        String databaseUrl = "jdbc:h2:mem:fivet_db";
+
+        //Fuente de conexion
+        try (ConnectionSource connectionSource = new JdbcConnectionSource(databaseUrl)) {
+
+            // Crear las tablas a probar
+            TableUtils.createTableIfNotExists(connectionSource, Persona.class);
+            TableUtils.createTableIfNotExists(connectionSource, Ficha.class);
+            TableUtils.createTableIfNotExists(connectionSource, Control.class);
+
+            //Repositorio de ficha
+            RepositoryOrmLite<Ficha, Long> repositoryFicha = new RepositoryOrmLite<Ficha, Long>(connectionSource, Ficha.class);
+            RepositoryOrmLite<Control, Long> repositoryControl = new RepositoryOrmLite<Control, Long>(connectionSource, Control.class);
+            RepositoryOrmLite<Persona, Long> repositoryPersona = new RepositoryOrmLite<Persona, Long>(connectionSource, Persona.class);
+            {
+                // Nueva persona a insertar en tabla Persona
+                Persona persona = new Persona("Pablo", "Salas", "194441568", "Calle Falsa 123", 780801, 974994775, "pablo.salas@alumnos.ucn.cl");
+                if (!new RepositoryOrmLite<Persona, Long>(connectionSource, Persona.class).insertar(persona)) {
+                    Assertions.fail("No se puede insertar a la persona");
+                }
+
+                // Instanciar una ficha
+                Ficha ficha = new Ficha(123, ZonedDateTime.now(), "Stefy", "Canino", "Pudul toy", Sexo.MACHO, "Blanco", Tipo.INTERNO, persona);
+
+                // Insertar una ficha en su tabla
+                if (!repositoryFicha.insertar(ficha)) {
+                    Assertions.fail("No se pudo crear la ficha");
+                }
+            }
+
+            {
+                //Obtener una ficha y ver si sus atributos son distintos de null
+                Ficha ficha = repositoryFicha.buscarPorId(1L);
+                //La ficha no puede ser nula
+                Assertions.assertNotNull(ficha,"Ficha fue nula");
+                Assertions.assertNotNull(ficha.getDuenio(),"La ficha no tiene dueño");
+                Assertions.assertNotNull(ficha.getDuenio().getRut(),"El rut del duenio fue nulo");
+                Assertions.assertNotNull(ficha.getFechaNacimiento(),"La mascota no tiene fecha de nacimiento");
+
+                Persona veterinario = new Persona("Ryu", "Gon", "84324302", "Calle Falsa 123", 780801, 974994775, "ryu.gon@gmail.com");
+                if (!repositoryPersona.insertar(veterinario)) {
+                    Assertions.fail("No se puede insertar a la persona");
+                }
+
+                Control control = new Control(ZonedDateTime.now(),ZonedDateTime.now(),36,50,10,"Esta bien",veterinario, ficha);
+                Control control2 = new Control(ZonedDateTime.now(),ZonedDateTime.now(),37,55,15,"Esta mal",veterinario, ficha);
+
+                if (!repositoryControl.insertar(control)) {
+                    Assertions.fail("No se pudo crear el control");
+                }
+
+
+
+                if (!repositoryControl.insertar(control2)) {
+                    Assertions.fail("No se pudo crear el control");
+                }
+
+
+                //Imprimir los atributos de la ficha
+                log.debug("Ficha {}.", Entity.toString(ficha));
+            }
+        } catch (IOException | SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

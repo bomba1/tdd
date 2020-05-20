@@ -23,6 +23,9 @@
  */
 
 package cl.ucn.disc.pdbp.tdd.model;
+import cl.ucn.disc.pdbp.tdd.dao.ZonedDateTimeType;
+import com.j256.ormlite.field.DatabaseField;
+
 import java.time.ZonedDateTime;
 /**
  * Control de un paciente
@@ -33,16 +36,19 @@ public final class Control {
     /**
      * Id del control
      */
+    @DatabaseField(generatedId = true)
     private Long idControl;
 
     /**
      * Fecha del control
      */
+    @DatabaseField(persisterClass = ZonedDateTimeType.class)
     private ZonedDateTime fecha;
 
     /**
      * Fecha proximo control
      */
+    @DatabaseField(persisterClass = ZonedDateTimeType.class)
     private ZonedDateTime fechaProximoControl;
 
     /**
@@ -50,6 +56,7 @@ public final class Control {
      * Min 28
      * Max 50   //TODO: verificar la temperatura minima y maxima
      */
+    @DatabaseField
     private double temperatura;
 
     /**
@@ -57,6 +64,7 @@ public final class Control {
      * Min 0
      * Max 200  //TODO: Verificar el valor maximo
      */
+    @DatabaseField
     private double peso;
 
     /**
@@ -64,18 +72,27 @@ public final class Control {
      * Min 1
      * Max 200 //TODO: Verificar la altura maxima
      */
+    @DatabaseField
     private double altura;
 
     /**
      * Diagnostico
      */
+    @DatabaseField
     private String diagnostico;
 
     /**
      * El veterinario
      * nota: Enlace muchos a uno con veterinario
      */
+    @DatabaseField(foreign = true, canBeNull = false, foreignAutoRefresh = true)
     private Persona veterinario;
+
+    /**
+     * Ficha del control
+     */
+    @DatabaseField(foreign = true, canBeNull = true, foreignAutoRefresh = true)
+    private Ficha ficha;
 
     /**
      * Constructor vacio de Control
@@ -94,7 +111,7 @@ public final class Control {
      * @param diagnostico
      * @param veterinario
      */
-    public Control(ZonedDateTime fecha, ZonedDateTime fechaProximoControl, double temperatura, double peso, double altura, String diagnostico, Persona veterinario) {
+    public Control(ZonedDateTime fecha, ZonedDateTime fechaProximoControl, double temperatura, double peso, double altura, String diagnostico, Persona veterinario, Ficha ficha) {
         // TODO :AGREGAR LAS RESTRICCIONES
         this.fecha = fecha;
         this.fechaProximoControl = fechaProximoControl;
@@ -103,6 +120,7 @@ public final class Control {
         this.altura = altura;
         this.diagnostico = diagnostico;
         this.veterinario = veterinario;
+        this.ficha = ficha;
     }
 
     /**
