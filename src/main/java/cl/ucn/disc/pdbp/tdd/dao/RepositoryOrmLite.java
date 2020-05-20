@@ -46,7 +46,11 @@ public final class RepositoryOrmLite<T, K> implements Repository<T, K> {
 
     @Override
     public T buscarPorId(K id) {
-        return null;
+        try {
+            return this.elDao.queryForId(id);
+        } catch (SQLException throwables) {
+            throw new RuntimeException(throwables);
+        }
     }
 
     @Override
@@ -60,11 +64,19 @@ public final class RepositoryOrmLite<T, K> implements Repository<T, K> {
 
     @Override
     public boolean actualizar(T t) {
-        return false;
+        try {
+            return elDao.update(t) == 1;
+        } catch (SQLException throwables){
+            throw new RuntimeException(throwables);
+        }
     }
 
     @Override
     public boolean eliminar(K id) {
-        return false;
+        try {
+            return elDao.deleteById(id) == 1;
+        } catch (SQLException throwables){
+            throw new RuntimeException(throwables);
+        }
     }
 }
