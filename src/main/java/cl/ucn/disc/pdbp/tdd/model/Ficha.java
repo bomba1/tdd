@@ -93,7 +93,7 @@ public final class Ficha {
     /**
      * El dueio de la mascota
      */
-    @DatabaseField(foreign = true, canBeNull = false, foreignAutoRefresh = true)
+    @DatabaseField(foreign = true, canBeNull = true, foreignAutoRefresh = true)
     private Persona duenio;
 
     /**
@@ -122,11 +122,36 @@ public final class Ficha {
      */
     public Ficha(Integer numero, ZonedDateTime fechaNacimiento, String nombrePaciente, String especie, String raza, Sexo sexo, String color, Tipo tipo, Persona duenio) {
         this.numero = numero;
+
+        if (fechaNacimiento.isAfter(ZonedDateTime.now())) {
+            throw new IllegalArgumentException("La fecha entregada es despues del dia actual...");
+        }
         this.fechaNacimiento = fechaNacimiento;
+
+        if (nombrePaciente.length() <= 2) {
+            throw new IllegalArgumentException("El nombre tiene menos de 3 letras");
+        }
+
+        if (nombrePaciente.equals("")) {
+            throw new IllegalArgumentException("El nombre es vacio");
+        }
         this.nombrePaciente = nombrePaciente;
+
         this.especie = especie;
+
+        if (raza.length() <= 3) {
+            throw new IllegalArgumentException("La raza tiene muy pocas letras");
+        }
+
+        if (raza.equalsIgnoreCase("")) {
+            throw new IllegalArgumentException("La raza es vacio");
+        }
         this.raza = raza;
         this.sexo = sexo;
+
+        if (color.equalsIgnoreCase("")) {
+            throw new IllegalArgumentException("El color es vacio");
+        }
         this.color = color;
         this.tipo = tipo;
         this.duenio = duenio;

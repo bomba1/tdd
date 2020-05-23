@@ -105,33 +105,56 @@ public final class Persona {
             throw new NullPointerException("Parametro nulo");
         }
 
-        if (nombre.length() < 2) {
+        if (nombre.equals("")) {
+            throw new IllegalArgumentException("El nombre es vacio");
+        }
+
+        if (nombre.length() <= 2) {
             throw new IllegalArgumentException("El nombre tiene menos de 2 letras");
         }
+
         this.nombre = nombre;
 
         if (apellido.length() < 3) {
             throw new IllegalArgumentException("El apellido tiene menos de 3 letras");
         }
+
         this.apellido = apellido;
 
-        if (!Validation.esValido(rut)) {
-            throw new RuntimeException("El rut deberia ser valido");
+        if (rut.equals("")) {
+            throw new IllegalArgumentException("El rut es vacio");
         }
+
+        if (!Validation.esValido(rut)) {
+            throw new IllegalArgumentException("El rut deberia ser valido");
+        }
+
         this.rut = rut;
+
+        if (direccion.equals("")) {
+            throw new IllegalArgumentException("Direccion fue vacia");
+        }
+
+        if (direccion.length() <= 2) {
+            throw new IllegalArgumentException("La direccion tiene 2 o menos letras");
+        }
 
         this.direccion = direccion;
 
         if (telefonoFijo < 100000) {
-            throw new RuntimeException("Telefono no valido");
+            throw new IllegalArgumentException("Telefono no valido");
         }
+
         this.telefonoFijo = telefonoFijo;
 
         if (telefonoMovil < 10000000) {
-            throw new RuntimeException("Movil no valido");
+            throw new IllegalArgumentException("Movil no valido");
         }
         this.telefonoMovil = telefonoMovil;
 
+        if (email.equals("")) {
+            throw new IllegalArgumentException("El email es vacio");
+        }
         Validation.validarEmail(email);
         this.email = email;
     }
