@@ -24,15 +24,18 @@
 
 package cl.ucn.disc.pdbp.tdd;
 
+import cl.ucn.disc.pdbp.tdd.model.Ficha;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.javalin.Javalin;
+import io.javalin.apibuilder.ApiBuilder;
 import io.javalin.core.util.RouteOverviewPlugin;
 import io.javalin.plugin.json.JavalinJson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 /**
  * Clase de aplicacion
@@ -57,6 +60,9 @@ public class Application {
      */
     public static void main(String[] args) {
 
+        //Los contratos
+        Contratos contratos = new ContratosImpl("jdbc:sqlite:fivet.db");
+
         // Persona <----> Json via libreria Gson
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
@@ -76,11 +82,46 @@ public class Application {
             }));
             javalinConfig.registerPlugin(new RouteOverviewPlugin("/routes"));
 
+        }).routes (() -> {
+
+            // La version
+            ApiBuilder.path("v1", () -> {
+
+                // /fichas
+                ApiBuilder.path("fichas", () -> {
+
+                    // Obtener -> /fichas
+                    ApiBuilder.get(ApiRestEndpoints::obtenerTodasLasFichas);
+
+                    //Obtener ->/fichas/find/{query}
+                    ApiBuilder.path("find/:query", () -> {
+                        ApiBuilder.get(ApiRestEndpoints::buscarFichas);
+                    });
+                });
+            });
+
         }).start(7000);
 
+        //Ruta para mostrar el tiempo
         javalin.get("/",ctx -> {
             // retorna el dato
             ctx.result("The Date: " + ZonedDateTime.now());
         });
+
+        //Obtener las fichas
+        javalin.get("/v1/fichas/", ctx -> {
+            List<Ficha> fichas = contratos.obtenerTodasLasFichas();
+            ctx.json(fichas);
+        });
+
+        //Obtener las fichas
+        javalin.get("/v1/fichas/:query", ctx -> {
+            String query = ctx.pathParam("query");
+            log.debug("Query: <{}>", query);
+
+            List<Ficha> fichas = contratos.buscarFicha(query);
+            ctx.json(fichas);
+        });
+
     }
 }

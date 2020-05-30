@@ -40,7 +40,10 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 /**
  * Implementacion de contratos
@@ -204,34 +207,23 @@ public class ContratosImpl implements Contratos {
             throw new RuntimeException(ex);
         }
 
+        //Remueve los duplicados
+        return new ArrayList<>(
+                fichas.stream().collect(
+                        Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(Ficha::getId)))
+                )
+        );
+    }
+
+    /**
+     * Retorna una lista con todas las fichas
+     */
+    @Override
+    public List<Ficha> obtenerTodasLasFichas() {
+        List<Ficha> fichas = this.repoFicha.obtenerLista();
+
         return fichas;
     }
 
-    /**
-     * Retorna la fuente de conexion
-     */
-    public ConnectionSource getConnectionSource() {
-        return connectionSource;
-    }
 
-    /**
-     * Retorna el repositorio de ficha
-     */
-    public Repository<Ficha, Long> getRepoFicha() {
-        return repoFicha;
-    }
-
-    /**
-     * Retorna el repositorio de persona
-     */
-    public Repository<Persona, Long> getRepoPersona() {
-        return repoPersona;
-    }
-
-    /**
-     * Retorna el repositorio de control
-     */
-    public Repository<Control, Long> getRepoControl() {
-        return repoControl;
-    }
 }
