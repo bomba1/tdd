@@ -24,7 +24,9 @@
 
 package cl.ucn.disc.pdbp.tdd;
 
+import cl.ucn.disc.pdbp.tdd.model.Control;
 import cl.ucn.disc.pdbp.tdd.model.Ficha;
+import cl.ucn.disc.pdbp.tdd.model.Persona;
 import io.javalin.http.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +59,7 @@ public class ApiRestEndpoints {
     public static void obtenerTodasLasFichas(Context ctx) {
         log.debug("Obteniendo todas las fichas ...");
         List<Ficha> fichas = CONTRATOS.obtenerTodasLasFichas();
-
+        ctx.json(fichas);
     }
 
     /**
@@ -66,9 +68,39 @@ public class ApiRestEndpoints {
     public static void buscarFichas(Context ctx) {
 
         String query = ctx.pathParam("query");
-        log.debug("Finding Fichas with query <{}> ...", query);
+        log.debug("Buscando fichas con query <{}> ...", query);
 
         List<Ficha> fichas = CONTRATOS.buscarFicha(query);
         ctx.json(fichas);
+    }
+
+    /**
+     * Obtener todas las personas
+     */
+    public static void obtenerTodasLasPersonas(Context ctx) {
+        log.debug("Obteniendo todas las personas ...");
+        List<Persona> personas = CONTRATOS.obtenerTodasLasPersonas();
+        ctx.json(personas);
+    }
+
+    /**
+     * Obtener una lista de controles a partir de un numero de ficha
+     */
+    public static void obtenerControlesDeFichas(Context ctx) {
+        log.debug("Obteniendo controles especificos...");
+        String query = ctx.pathParam("numeroFicha");
+        log.debug("Buscando controles con numero de ficha <{}> ...", query);
+        List<Control> controles = CONTRATOS.obtenerControlesDeFicha(query);
+        ctx.json(controles);
+    }
+
+    /**
+     *Devuelve una persona un numero de ficha
+     */
+    public static void buscarPersonaPorFicha(Context ctx) {
+        log.debug("Buscando persona por numero de ficha...");
+        String query = ctx.pathParam("numeroFicha");
+        Persona persona = CONTRATOS.buscarPersonaPorFicha(query);
+        ctx.json(persona);
     }
 }

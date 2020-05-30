@@ -225,5 +225,75 @@ public class ContratosImpl implements Contratos {
         return fichas;
     }
 
+    /**
+     * Retorna una lista con todas las personas
+     */
+    @Override
+    public List<Persona> obtenerTodasLasPersonas() {
+        List<Persona> personas = this.repoPersona.obtenerLista();
 
+        return personas;
+    }
+
+    public List<Control> obtenerControlesDeFicha(String numeroFicha) {
+
+        //Verificar nulidad
+        if (numeroFicha == null) {
+            throw new IllegalArgumentException("El numero de ficha es nulo");
+        }
+
+        //Variable a retornar, un listado de controles a partir de un numero de ficha
+        List<Control> controles = new ArrayList<>();
+
+        try {
+
+            if (StringUtils.isNumeric(numeroFicha)) {
+
+                // Buscar por numero de ficha
+                log.debug("Buscando controles por numero de ficha");
+                QueryBuilder<Ficha, Long> queryFicha = this.repoFicha.getQuery();
+                queryFicha.where().eq("numero", numeroFicha);
+
+                //Agregar los controles filtrados por numero de ficha
+                controles.addAll(this.repoControl.getQuery().join(queryFicha).query());
+
+                return controles;
+
+            } else {
+                throw new IllegalArgumentException("Ingrese un numeros, no letras");
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+
+    }
+
+    public Persona buscarPersonaPorFicha(String numeroFicha) {
+
+        //Verificar nulidad
+        if (numeroFicha == null) {
+            throw new IllegalArgumentException("El numero de ficha es nulo");
+        }
+        Persona persona = null;
+
+        try {
+
+            if (StringUtils.isNumeric(numeroFicha)) {
+                //Buscar la ficha
+                QueryBuilder<Ficha, Long> queryFicha = this.repoFicha.getQuery();
+                queryFicha.where().eq("numero", numeroFicha);
+
+                QueryBuilder<Persona, Long> queryPersona = this.repoPersona.getQuery();
+                persona = queryPersona.join(queryFicha).queryForFirst();
+                if (persona == null) {
+                    throw new RuntimeException("No hay persona con tal ficha");
+                }
+                return persona;
+            } else {
+                throw new IllegalArgumentException("Ingrese un numeros, no letras");
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 }

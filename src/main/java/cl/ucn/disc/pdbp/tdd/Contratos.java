@@ -24,6 +24,7 @@
 
 package cl.ucn.disc.pdbp.tdd;
 
+import cl.ucn.disc.pdbp.tdd.model.Control;
 import cl.ucn.disc.pdbp.tdd.model.Ficha;
 import cl.ucn.disc.pdbp.tdd.model.Persona;
 
@@ -63,4 +64,21 @@ public interface Contratos {
      * Retorna una lista con todas las fichas
      */
     List<Ficha> obtenerTodasLasFichas();
+
+    /**
+     * Retorna una lista con todas las fichas
+     */
+    List<Persona> obtenerTodasLasPersonas();
+
+    /**
+     * Retorna una lista de controles a partir de un numero de ficha
+     * @return
+     */
+    List<Control> obtenerControlesDeFicha(String numeroFicha);
+
+    /**
+     * Retorna una persona a partir de un numero de ficha
+     * @return
+     */
+    Persona buscarPersonaPorFicha(String numeroFicha);
 }
