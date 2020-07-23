@@ -50,7 +50,7 @@ public final class ModelTest {
      */
     @Test //Hara que este metodo se ejecute a traves de las pruebas y que cuando termine no lance exception
     public void testPersona() {
-        /*
+
         log.debug("Testing Persona ..");
 
         // The data!
@@ -59,35 +59,55 @@ public final class ModelTest {
         String apellido = "Contreras";
         String nombreApellido = nombre + " " + apellido;
         String rutOk = "152532873";
-        String rutError = "15253287K";
+
+        String direccion = "emilio vaisse 01488";
+        Integer telefonoFijo = 780801;
+        Integer telefonoMovil = 74994775;
+        String email = "pablo.gun.66@gmail.com";
 
         String nombreError = "o";
         String apellidoError = "da";
+        String rutError = "15253287K";
+        String direccionError = "a";
+        Integer telefonoFijoError = 1;
+        Integer telefonoMovilError = 1;
+        String emailError = "a";
+
 
         // Test constructor and getters
-        Persona persona = new Persona(nombre, apellido, rutOk);
+        Persona persona = new Persona(nombre, apellido, rutOk,direccion,telefonoFijo,telefonoMovil,email);
         Assertions.assertEquals(persona.getNombre(), nombre);
         Assertions.assertEquals(persona.getApellido(), apellido);
         Assertions.assertEquals(persona.getNombreApellido(), nombreApellido);
+        Assertions.assertEquals(persona.getRut(),rutOk);
+        Assertions.assertEquals(persona.getDireccion(),direccion);
+        Assertions.assertEquals(persona.getTelefonoFijo(),telefonoFijo);
+        Assertions.assertEquals(persona.getTelefonoMovil(),telefonoMovil);
+        Assertions.assertEquals(persona.getEmail(),email);
+
 
         // Testing nullity
         log.debug(".. nullity ..");
-        Assertions.assertThrows(NullPointerException.class, () -> new Persona(null, null, null));
-        Assertions.assertThrows(NullPointerException.class, () -> new Persona(null, null, rutOk));
-        Assertions.assertThrows(NullPointerException.class, () -> new Persona(null, apellido, null));
-        Assertions.assertThrows(NullPointerException.class, () -> new Persona(null, apellido, rutOk));
-        Assertions.assertThrows(NullPointerException.class, () -> new Persona(nombre, null, null));
-        Assertions.assertThrows(NullPointerException.class, () -> new Persona(nombre, null, rutOk));
-        Assertions.assertThrows(NullPointerException.class, () -> new Persona(nombre, apellido, null));
+        Assertions.assertThrows(NullPointerException.class, () -> new Persona(null, apellido, rutOk,direccion,telefonoFijo,telefonoMovil,email));
+        Assertions.assertThrows(NullPointerException.class, () -> new Persona(nombre, null, rutOk,direccion,telefonoFijo,telefonoMovil,email));
+        Assertions.assertThrows(NullPointerException.class, () -> new Persona(nombre, apellido, null,direccion,telefonoFijo,telefonoMovil,email));
+        Assertions.assertThrows(NullPointerException.class, () -> new Persona(nombre, apellido, rutOk,null,telefonoFijo,telefonoMovil,email));
+        Assertions.assertThrows(NullPointerException.class, () -> new Persona(nombre, apellido, rutOk,direccion,null,telefonoMovil,email));
+        Assertions.assertThrows(NullPointerException.class, () -> new Persona(nombre, apellido, rutOk,direccion,telefonoFijo,null,email));
+        Assertions.assertThrows(NullPointerException.class, () -> new Persona(nombre, apellido, rutOk,direccion,telefonoFijo,telefonoMovil,null));
 
         // Testing invalid rut
         log.debug(".. rut ..");
-        Assertions.assertThrows(RuntimeException.class, () -> new Persona(nombre, apellido, rutError));
+        Assertions.assertThrows(RuntimeException.class, () -> new Persona(nombre, apellido, rutError,direccion,telefonoFijo,telefonoMovil,email));
 
-        // Testing name and lastname length
-        Assertions.assertThrows(IllegalArgumentException.class, () -> new Persona(nombreError,apellido,rutOk));
-        Assertions.assertThrows(IllegalArgumentException.class, () -> new Persona(nombre,apellidoError,rutOk));
-        log.debug("Done.");*/
+        // Testing errors in every parameter
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Persona(nombreError, apellido, rutOk,direccion,telefonoFijo,telefonoMovil,email));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Persona(nombre, apellidoError, rutOk,direccion,telefonoFijo,telefonoMovil,email));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Persona(nombre, apellidoError, rutOk,direccionError,telefonoFijo,telefonoMovil,email));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Persona(nombre, apellidoError, rutOk,direccion,telefonoFijoError,telefonoMovil,email));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Persona(nombre, apellidoError, rutOk,direccion,telefonoFijo,telefonoMovilError,email));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Persona(nombre, apellidoError, rutOk,direccion,telefonoFijo,telefonoMovil,emailError));
+        log.debug("Done.");
 
     }
 
