@@ -235,6 +235,9 @@ public class ContratosImpl implements Contratos {
         return personas;
     }
 
+    /**
+     * Retorna los controles de una ficha
+     */
     public List<Control> obtenerControlesDeFicha(String numeroFicha) {
 
         //Verificar nulidad
@@ -268,6 +271,9 @@ public class ContratosImpl implements Contratos {
 
     }
 
+    /**
+     * Retorna la persona por ficha
+     */
     public Persona buscarPersonaPorFicha(String numeroFicha) {
 
         //Verificar nulidad
@@ -295,5 +301,37 @@ public class ContratosImpl implements Contratos {
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    /**
+     * Retorna una persona por su id
+     */
+    public Persona buscarPersona(Long id) {
+        Persona persona = this.repoPersona.buscarPorId(id);
+        return persona;
+    }
+
+    /**
+     * Retorna una ficha por su id
+     */
+    public Ficha buscarUnaFicha(Long id) {
+        Ficha ficha = this.repoFicha.buscarPorId(id);
+        return ficha;
+    }
+
+    /**
+     * Inserta un contrato en la base de datos
+     */
+    public Control registrarControl(Control control) {
+        if (control == null) {
+            log.debug("El contrato no puede ser ingresado porque es nulo");
+            return null;
+        }
+
+        this.repoControl.insertar(control);
+
+        Control controlAux = this.repoControl.buscarPorId(control.getIdControl());
+
+        return controlAux;
     }
 }

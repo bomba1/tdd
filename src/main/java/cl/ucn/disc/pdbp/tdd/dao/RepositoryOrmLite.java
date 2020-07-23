@@ -33,7 +33,6 @@ public final class RepositoryOrmLite<T, K> implements Repository<T, K> {
             throw new RuntimeException(throwables);
         }
 
-
     }
 
     /**

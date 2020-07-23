@@ -24,13 +24,14 @@
 
 package cl.ucn.disc.pdbp.tdd;
 
-import cl.ucn.disc.pdbp.tdd.model.Control;
-import cl.ucn.disc.pdbp.tdd.model.Ficha;
-import cl.ucn.disc.pdbp.tdd.model.Persona;
+import cl.ucn.disc.pdbp.tdd.dao.ZonedDateTimeType;
+import cl.ucn.disc.pdbp.tdd.model.*;
 import io.javalin.http.Context;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 public class ApiRestEndpoints {
@@ -102,5 +103,88 @@ public class ApiRestEndpoints {
         String query = ctx.pathParam("numeroFicha");
         Persona persona = CONTRATOS.buscarPersonaPorFicha(query);
         ctx.json(persona);
+    }
+
+    /**
+     * Inserta una persona en la base de datos
+     * @param ctx
+     */
+    public static void insertarPersona( Context ctx) {
+
+        //Obtener los datos del json proveniente
+        String nombre = ctx.queryParam("nombre");
+        String apellido = ctx.queryParam("apellido");
+        String rut = ctx.queryParam("rut");
+        String direccion = ctx.queryParam("direccion");
+        Integer telefonoFijo = Integer.parseInt(ctx.queryParam("telefonoFijo"));
+        Integer telefonoMovil = Integer.parseInt(ctx.queryParam("telefonoMovil"));
+        String email = ctx.queryParam("email");
+
+        Persona persona = new Persona(nombre,apellido,rut,direccion,telefonoFijo,telefonoMovil,email);
+
+        CONTRATOS.registrarPersona(persona);
+        ctx.json(persona);
+    }
+
+    /**
+     * Insertar una ficha en la base de datos
+     * @param ctx
+     */
+    public static void insertarFicha(Context ctx) {
+
+        // Obtener todos los datos
+        Integer numero = Integer.parseInt(ctx.queryParam("numero"));
+        String nombrePaciente = ctx.queryParam("nombrePaciente");
+        String especie = ctx.queryParam("especie");
+        ZonedDateTime fechaNacimiento = ZonedDateTime.parse(ctx.queryParam("fechaNacimiento"));
+        String raza = ctx.queryParam("raza");
+
+        // Vemos si el sexo es macho o hembra
+        Sexo sexo;
+        if(ctx.queryParam("sexo").equalsIgnoreCase("macho")) {
+            sexo = Sexo.MACHO;
+        } else{
+            sexo = Sexo.HEMBRA;
+        }
+        String color = ctx.queryParam("color");
+
+        //Vemos si el tipo es interno o externo
+        Tipo tipo = null;
+        if(ctx.queryParam("tipo").equals("interno")) {
+            tipo = Tipo.INTERNO;
+        } else {
+            tipo = Tipo.EXTERNO;
+        }
+
+        // Buscamos al dueño de la mascota
+        Long idDuenio = Long.parseLong(ctx.queryParam("duenio"));
+        Persona duenio = CONTRATOS.buscarPersona(idDuenio);
+
+        // Se crea la ficha
+        Ficha ficha = new Ficha(numero,fechaNacimiento,especie,nombrePaciente,raza,sexo,color,tipo,duenio);
+        CONTRATOS.registrarPaciente(ficha);
+        ctx.json(ficha);
+    }
+
+
+    public static void insertarControl(Context ctx) {
+        ZonedDateTime fecha = ZonedDateTime.parse(ctx.queryParam("fecha"));
+        ZonedDateTime fechaProximoControl = ZonedDateTime.parse(ctx.queryParam("fechaProximoControl"));
+        double temperatura = Double.parseDouble(ctx.queryParam("temperatura"));
+        double peso = Double.parseDouble(ctx.queryParam("peso"));
+        double altura = Double.parseDouble(ctx.queryParam("altura"));
+        String diagnostico = ctx.queryParam("diagnostico");
+
+        // Buscamos al dueño de la mascota
+        Long idVeterinario = Long.parseLong(ctx.queryParam("veterinario"));
+        Persona veterinario = CONTRATOS.buscarPersona(idVeterinario);
+
+        // Buscamos la ficha del control
+        Long idFicha = Long.parseLong(ctx.queryParam("ficha"));
+        Ficha ficha = CONTRATOS.buscarUnaFicha(idFicha);
+
+        Control control = new Control(fecha,fechaProximoControl,temperatura,peso,altura,diagnostico,veterinario,ficha);
+        CONTRATOS.registrarControl(control);
+        ctx.json(control);
     }
 }

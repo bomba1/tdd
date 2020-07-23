@@ -81,4 +81,19 @@ public interface Contratos {
      * @return
      */
     Persona buscarPersonaPorFicha(String numeroFicha);
+
+    /**
+     * Retorna una persona por su id
+     */
+    Persona buscarPersona(Long id);
+
+    /**
+     * Retorna una ficha por su id
+     */
+    Ficha buscarUnaFicha(Long id);
+
+    /**
+     * Inserta un contrato en la base de datos
+     */
+    Control registrarControl(Control control);
 }

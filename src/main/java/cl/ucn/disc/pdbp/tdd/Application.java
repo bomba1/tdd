@@ -90,6 +90,8 @@ public class Application {
                     // Obtener -> /fichas
                     ApiBuilder.get(ApiRestEndpoints::obtenerTodasLasFichas);
 
+                    ApiBuilder.post(ApiRestEndpoints::insertarFicha);
+
                     //Obtener ->/fichas/find/{query}
                     ApiBuilder.path("find/:query", () -> {
                         ApiBuilder.get(ApiRestEndpoints::buscarFichas);
@@ -98,6 +100,7 @@ public class Application {
                     //Obtener controles de ficha
                     ApiBuilder.path(":numeroFicha/controles", () -> {
                         ApiBuilder.get(ApiRestEndpoints::obtenerControlesDeFichas);
+                        ApiBuilder.post(ApiRestEndpoints::insertarControl);
                     });
 
 
@@ -113,6 +116,9 @@ public class Application {
                 ApiBuilder.path("personas", () -> {
                     // Obtener -> /fichas
                     ApiBuilder.get(ApiRestEndpoints::obtenerTodasLasPersonas);
+
+                    // Insertar a la persona
+                    ApiBuilder.post(ApiRestEndpoints::insertarPersona);
 
                     //Obtener ->/personas?pageSize={size}&page={number}
                     ApiBuilder.path("?pageSize=:size&page=:number", () -> {
